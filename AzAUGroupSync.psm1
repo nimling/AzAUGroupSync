@@ -1,3 +1,16 @@
+function Get-AllAU {
+  <#
+  .SYNOPSIS
+    Returns all AUs from the currently connected tenant
+  #>
+  $requestSettings = @{
+    "Method"  = "Get"
+    "Uri"     = "https://graph.microsoft.com/v1.0/directory/administrativeUnits"
+  }
+  $AUs = Invoke-Graphrequest @requestSettings
+  return $AUs.value
+}
+
 function Get-AUName 
 {
   <#
