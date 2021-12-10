@@ -4,15 +4,14 @@ function Get-AllAU {
     Returns all AUs from the currently connected tenant
   #>
   $requestSettings = @{
-    "Method"  = "Get"
-    "Uri"     = "https://graph.microsoft.com/v1.0/directory/administrativeUnits"
+    "Method" = "Get"
+    "Uri"    = "https://graph.microsoft.com/v1.0/directory/administrativeUnits"
   }
   $AUs = Invoke-Graphrequest @requestSettings
   return $AUs.value
 }
 
-function Get-AUName 
-{
+function Get-AUName {
   <#
   .SYNOPSIS
     Retreives name of Administratrive Unit
@@ -20,38 +19,36 @@ function Get-AUName
   param
   (
     # Azure AD object Id for Administrative Unit
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$AUId
   )
   $requestSettings = @{
-    "Method"  = "Get"
-    "Uri"     = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId"
+    "Method" = "Get"
+    "Uri"    = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId"
   }
   $AU = Invoke-Graphrequest @requestSettings
   return $AU.displayName
 }
 
-function Get-UserName 
-{
+function Get-UserName {
   <#
   .SYNOPSIS
     Retreives name of AD user
   #>
   param (
     # Azure AD object Id for user
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$UserId
   )
   $requestSettings = @{
-    "Method"  = "Get"
-    "Uri"     = "https://graph.microsoft.com/v1.0/users/$UserId"
+    "Method" = "Get"
+    "Uri"    = "https://graph.microsoft.com/v1.0/users/$UserId"
   }
   $User = Invoke-Graphrequest @requestSettings
   return $User.displayName
 }
 
-function Get-GroupName 
-{
+function Get-GroupName {
   <#
   .SYNOPSIS
     Retreives name of AD group
@@ -59,19 +56,18 @@ function Get-GroupName
   param
   (
     # Azure AD object Id for Group
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$GroupId
   ) 
   $requestSettings = @{
-    "Method"  = "Get"
-    "Uri"     = "https://graph.microsoft.com/v1.0/groups/$GroupId"
+    "Method" = "Get"
+    "Uri"    = "https://graph.microsoft.com/v1.0/groups/$GroupId"
   }
   $Group = Invoke-Graphrequest @requestSettings
   return $Group.displayName
 }
 
-function Add-AUMember 
-{
+function Add-AUMember {
   <#
   .SYNOPSIS
     Adds Azure AD user to Administrative Unit.
@@ -79,16 +75,16 @@ function Add-AUMember
   param
   (  
     # Azure AD object Id for user
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$UserId,
     # Azure AD object Id for Administrative Unit
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$AUId
   )
   $requestSettings = @{
-    "Method"  = "Post"
-    "Uri"     = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId/members/`$ref"
-    "Body"    = "{`"@odata.id`": `"https://graph.microsoft.com/v1.0/directoryObjects/$UserId`"}"
+    "Method" = "Post"
+    "Uri"    = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId/members/`$ref"
+    "Body"   = "{`"@odata.id`": `"https://graph.microsoft.com/v1.0/directoryObjects/$UserId`"}"
   }
   
   try {
@@ -102,50 +98,47 @@ function Add-AUMember
   return
 }
 
-function Get-AUIdFromName 
-{
+function Get-AUIdFromName {
   <#
   .SYNOPSIS
     Retrieves Administrative Unit Id from Administrative Unit name.
   #>
   param (
     # Azure AD object name for Administrative Unit
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$AUName
   )
   $requestSettings = @{
-    "Method"  = "Get"
-    "Uri"     = "https://graph.microsoft.com/v1.0/directory/administrativeUnits"
+    "Method" = "Get"
+    "Uri"    = "https://graph.microsoft.com/v1.0/directory/administrativeUnits"
   }
   $AUs = Invoke-Graphrequest @requestSettings
 
-  $AUId = ($AUs.value | Where-Object {$_.displayName -eq $AUName}).id
+  $AUId = ($AUs.value | Where-Object { $_.displayName -eq $AUName }).id
   return $AUId
 }
 
-function Get-GroupIdFromName 
-{
+function Get-GroupIdFromName {
   <#
   .SYNOPSIS
     Retrieves group Id from group name.
   #>
   param (
     # Azure AD object name for group
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$GroupName
   )
   $requestSettings = @{
-    "Method"  = "Get"
-    "Uri"     = "https://graph.microsoft.com/v1.0/groups"
+    "Method" = "Get"
+    "Uri"    = "https://graph.microsoft.com/v1.0/groups"
   }
   $Groups = Invoke-Graphrequest @requestSettings
 
-  $GroupId = ($Groups.value | Where-Object {$_.displayName -eq $GroupName}).id
+  $GroupId = ($Groups.value | Where-Object { $_.displayName -eq $GroupName }).id
   return $GroupId
 }
 
-function Remove-AUMember 
-{
+function Remove-AUMember {
   <#
   .SYNOPSIS
     Removes Azure AD user from Administrative Unit.
@@ -153,15 +146,15 @@ function Remove-AUMember
   param
   (
     # Azure AD object Id for user
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$UserId,
     # Azure AD object Id for Administrative Unit
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$AUId
   )
   $requestSettings = @{
-    "Method"  = "Delete"
-    "Uri"     = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId/members/$UserId/`$ref"
+    "Method" = "Delete"
+    "Uri"    = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId/members/$UserId/`$ref"
   }
   
   try {
@@ -175,8 +168,7 @@ function Remove-AUMember
   return
 }
 
-function Get-AUUserMembers 
-{
+function Get-AUUserMembers {
   <#
   .SYNOPSIS
     Retrieves user members of Administrative Unit
@@ -184,19 +176,18 @@ function Get-AUUserMembers
   param
   (
     # Azure AD object Id for Administrative Unit
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$AUId
   )
   $requestSettings = @{
-    "Method"  = "Get"
-    "Uri"     = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId/members"
+    "Method" = "Get"
+    "Uri"    = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId/members"
   }
   $AUUserMembers = Invoke-Graphrequest @requestSettings
-  return ($AUUserMembers.value | Where-Object {$_."@odata.type" -eq "#microsoft.graph.user"})
+  return ($AUUserMembers.value | Where-Object { $_."@odata.type" -eq "#microsoft.graph.user" })
 }
 
-function Get-AUGroupMembers 
-{
+function Get-AUGroupMembers {
   <#
   .SYNOPSIS
     Retrieves group members of Administrative Units
@@ -204,19 +195,18 @@ function Get-AUGroupMembers
   param
   (
     # Azure AD object Id for Administrative Unit
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$AUId
   )
   $requestSettings = @{
-    "Method"  = "Get"
-    "Uri"     = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId/members"
+    "Method" = "Get"
+    "Uri"    = "https://graph.microsoft.com/v1.0/directory/administrativeUnits/$AUId/members"
   }
 
   $AUGroupMembers = Invoke-Graphrequest @requestSettings
-  $AUGroupMembers = $AUGroupMembers.value | Where-Object {$_."@odata.type" -eq "#microsoft.graph.group"}
+  $AUGroupMembers = $AUGroupMembers.value | Where-Object { $_."@odata.type" -eq "#microsoft.graph.group" }
 
-  if($null -eq $AUGroupMembers)
-  {
+  if ($null -eq $AUGroupMembers) {
     Write-Host "AU $(Get-AUName -AUId -$AUId) ($AUId) are not assigned any groups."
     return
   }
@@ -225,8 +215,7 @@ function Get-AUGroupMembers
   }
 }
 
-function Get-GroupMembers 
-{
+function Get-GroupMembers {
   <#
   .SYNOPSIS
     Retrieves user members of group
@@ -234,19 +223,18 @@ function Get-GroupMembers
   param
   (
     # Azure AD object Id for Group
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$GroupId
   ) 
   $requestSettings = @{
-    "Method"  = "Get"
-    "Uri"     = "https://graph.microsoft.com/v1.0/groups/$GroupId/members"
+    "Method" = "Get"
+    "Uri"    = "https://graph.microsoft.com/v1.0/groups/$GroupId/members"
   }
 
   return Invoke-Graphrequest @requestSettings
 }
 
-function Sync-AUandGroup
-{
+function Sync-AUandGroup {
   <#
   .SYNOPSIS
     Synchronizes user members of Administrative Unit with users in an AD group
@@ -255,16 +243,16 @@ function Sync-AUandGroup
   param
   (
     # Azure AD object Id for Group
-    [Parameter(ParameterSetName = 'Id', Mandatory=$true)]
+    [Parameter(ParameterSetName = 'Id', Mandatory = $true)]
     [string]$GroupId,
     # Azure AD object Id for Administrative Unit
-    [Parameter(ParameterSetName = 'Id', Mandatory=$true)]
+    [Parameter(ParameterSetName = 'Id', Mandatory = $true)]
     [string]$AUId,
     # Azure AD object name for Group
-    [Parameter(ParameterSetName = 'Name', Mandatory=$true)]
+    [Parameter(ParameterSetName = 'Name', Mandatory = $true)]
     [string]$GroupName,
     # Azure AD object name for Administrative Unit
-    [Parameter(ParameterSetName = 'Name', Mandatory=$true)]
+    [Parameter(ParameterSetName = 'Name', Mandatory = $true)]
     [string]$AUName
   )
   
@@ -286,8 +274,7 @@ function Sync-AUandGroup
   $AUMembers = Get-AUUserMembers -AUId $AUId
 
   # Removes all users from AU if groups don't contain user members or if AU does not contain any groups
-  if ($null -eq $Users -and $null -ne $AUMembers) 
-  {
+  if ($null -eq $Users -and $null -ne $AUMembers) {
     foreach ($user in $AUMembers.id) {
       Remove-AUMember -UserId $user -AUId $AUId
     }
@@ -295,8 +282,7 @@ function Sync-AUandGroup
   }
 
   # Adds all group members to AU if AU does not contain any user members
-  elseif ($null -eq $AUMembers -and $null -ne $Users) 
-  {
+  elseif ($null -eq $AUMembers -and $null -ne $Users) {
     foreach ($user in $Users) {
       Add-AUMember -UserId $user -AUId $AUId
     }
@@ -308,24 +294,19 @@ function Sync-AUandGroup
     return
   }
 
-  else 
-  {
+  else {
     # Makes a comparison between AU user members and aggregated user members
     $Compare = Compare-Object -ReferenceObject ($AUMembers).Id -DifferenceObject ($Users) -IncludeEqual
 
     # Update AU according to results from comparison
-    foreach ($user in $Compare) 
-    {
-      if($user.SideIndicator -eq "<=")
-      {
+    foreach ($user in $Compare) {
+      if ($user.SideIndicator -eq "<=") {
         Remove-AUMember -UserId $user.InputObject -AUId $AUId
       }
-      elseif($user.SideIndicator -eq "=>")
-      {
+      elseif ($user.SideIndicator -eq "=>") {
         Add-AUMember -UserId $user.InputObject -AUId $AUId
       }
-      elseif($user.SideIndicator -eq "==")
-      {
+      elseif ($user.SideIndicator -eq "==") {
         continue
       }
     }
@@ -333,8 +314,7 @@ function Sync-AUandGroup
   }
 }
 
-function Sync-AUMembers
-{
+function Sync-AUMembers {
   <#
   .SYNOPSIS
     Synchronizes user members of Administrative Unit with AD groups which are members of the Administrative Unit.
@@ -343,10 +323,10 @@ function Sync-AUMembers
   param
   (
     # Azure AD object Id for Administrative Unit
-    [Parameter(ParameterSetName = 'Id', Mandatory=$true)]
+    [Parameter(ParameterSetName = 'Id', Mandatory = $true)]
     [string]$AUId,
     # Azure AD object name for Administrative Unit
-    [Parameter(ParameterSetName = 'Name', Mandatory=$true)]
+    [Parameter(ParameterSetName = 'Name', Mandatory = $true)]
     [string]$AUName
   )
   
@@ -363,11 +343,9 @@ function Sync-AUMembers
 
   # Creates list of all users who are members of $AUGroups
   $Users = @()
-  foreach ($group in $AUGroups) 
-  {
+  foreach ($group in $AUGroups) {
     $GroupUsers = Get-GroupMembers -GroupId $group.id
-    foreach($GroupUser in $GroupUsers.value.id) 
-    {
+    foreach ($GroupUser in $GroupUsers.value.id) {
       $Users += $GroupUser 
     }
   }
@@ -378,8 +356,7 @@ function Sync-AUMembers
   $AUMembers = Get-AUUserMembers -AUId $AUId
 
   # Removes all users from AU if groups don't contain user members or if AU does not contain any groups
-  if ($null -eq $Users -and $null -ne $AUMembers) 
-  {
+  if ($null -eq $Users -and $null -ne $AUMembers) {
     foreach ($user in $AUMembers.id) {
       Remove-AUMember -UserId $user -AUId $AUId
     }
@@ -387,8 +364,7 @@ function Sync-AUMembers
   }
 
   # Adds all group members to AU if AU does not contain any user members
-  elseif ($null -eq $AUMembers -and $null -ne $Users) 
-  {
+  elseif ($null -eq $AUMembers -and $null -ne $Users) {
     foreach ($user in $Users) {
       Add-AUMember -UserId $user -AUId $AUId
     }
@@ -400,24 +376,19 @@ function Sync-AUMembers
     return
   }
 
-  else 
-  {
+  else {
     # Makes a comparison between AU user members and aggregated group user members
     $Compare = Compare-Object -ReferenceObject ($AUMembers).Id -DifferenceObject ($Users) -IncludeEqual
 
     # Update AU according to results from comparison
-    foreach ($user in $Compare) 
-    {
-      if($user.SideIndicator -eq "<=")
-      {
+    foreach ($user in $Compare) {
+      if ($user.SideIndicator -eq "<=") {
         Remove-AUMember -UserId $user.InputObject -AUId $AUId
       }
-      elseif($user.SideIndicator -eq "=>")
-      {
+      elseif ($user.SideIndicator -eq "=>") {
         Add-AUMember -UserId $user.InputObject -AUId $AUId
       }
-      elseif($user.SideIndicator -eq "==")
-      {
+      elseif ($user.SideIndicator -eq "==") {
         continue
       }
     }
